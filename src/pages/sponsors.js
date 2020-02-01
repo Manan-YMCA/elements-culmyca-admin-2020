@@ -8,7 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { makeStyle, makeStyles } from "@material-ui/core/styles"
+import { makeStyles } from "@material-ui/core/styles"
 import { useFormik } from "formik"
 
 import { actions } from "../core/reducers/sponsor"
@@ -23,7 +23,6 @@ import { useConfirmationDialog } from "../component/dialog"
 import { useSnackbar as useSnackbarQ } from "notistack"
 import * as yup from "yup";
 import AddIcon from "@material-ui/icons/Add";
-import LinkOpen from "@material-ui/icons/OpenInBrowser"
 
 
 const useStyle = makeStyles({
@@ -98,7 +97,7 @@ function SponsorDialog({ open, handleClose, title, edit, initialValues = {
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbarQ();
     const formik = useFormik({
-        initialValues,
+        initialValues: initialValues,
         validationSchema: yup.object({
             name: yup.string()
                 .max(30, "Must be less than 30")
@@ -142,13 +141,13 @@ function SponsorDialog({ open, handleClose, title, edit, initialValues = {
                 handleClose()
             })
         }
-    })
+    }, [edit, enqueueSnackbar, dispatch, formik.values, initialValues.id, handleClose])
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Sponsor</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    {title}
+                    {edit ? "Edit sponsor details for various event in the system" : "Create New Sponsor for various event in the system"}
                 </DialogContentText>
                 <SponsorForm handleSubmit={() => { }} formik={formik} />
             </DialogContent>
@@ -182,24 +181,24 @@ export default function User() {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(actions.getSponsor(serviceInstance.get(`/sponsor?perPage=${perPage}&page=${page}`)))
-    }, [dispatch])
+    }, [dispatch, page, perPage])
     const onPerPageChange = React.useCallback((perPage) => {
         dispatch(actions.getSponsor(serviceInstance.get(`/sponsor?perPage=${perPage}&page=${page}&search=${search}`)))
-    }, [dispatch])
+    }, [dispatch, page, search])
     const onPageChange = React.useCallback((page) => {
         dispatch(actions.getSponsor(serviceInstance.get(`/sponsor?perPage=${perPage}&page=${page}&search=${search}`)))
-    }, [dispatch])
+    }, [dispatch, perPage, search])
     const onSearchChange = React.useCallback((term) => {
         setSearch(term ? term : "");
         dispatch(actions.getSponsor(serviceInstance.get(`/sponsor?perPage=${perPage}&page=${page}&search=${term ? term : ""}`)))
-    }, [dispatch])
+    }, [dispatch, perPage, page])
     const onSearchClose = React.useCallback(() => {
         dispatch(actions.getSponsor(serviceInstance.get(`/sponsor?perPage=${10}&page=${0}`)))
     }, [dispatch])
 
     const handleClose = React.useCallback(() => {
         setOpen(!open)
-    })
+    }, [open, setOpen])
 
     const handleDelete = React.useCallback((id) => {
         serviceInstance.delete(`brics/sponsor/${id}`).then(() => {
@@ -213,13 +212,13 @@ export default function User() {
         }).finally(() => {
             dispatch(actions.getSponsor(serviceInstance.get(`/sponsor?perPage=${10}&page=${0}`)))
         })
-    });
+    }, [enqueueSnackbar, dispatch]);
 
     const handleEditClick = React.useCallback((val) => {
         setEdit(true)
         handleClose();
         setIntialValue(val);
-    })
+    }, [setEdit, handleClose, setIntialValue])
 
     const handleNewClick = React.useCallback(() => {
         setEdit(false);
@@ -231,7 +230,7 @@ export default function User() {
             sponsorType: "",
             tagLine: ""
         })
-    })
+    }, [setIntialValue, handleClose, setEdit])
 
     const renderAction = (id, tableMetaData) => <><IconButton onClick={() => getConfirmation({
         title: 'Delete sponsor',
@@ -240,7 +239,7 @@ export default function User() {
 
     })}><DeleteIcon /></IconButton><IconButton onClick={() => handleEditClick(list[tableMetaData.rowIndex])} ><EditIcon /></IconButton></>
     const extraAction = () => <IconButton onClick={handleNewClick}> <AddIcon /></IconButton>
-    const renderLink = (url) => <a herf={url}>{url}</a>
+    const renderLink = (url) => <a href={url}>{url}</a>
     return <>
         <SponsorDialog
             open={open}

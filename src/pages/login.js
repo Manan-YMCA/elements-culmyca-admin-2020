@@ -24,15 +24,15 @@ function Login() {
     const [email, setEmail] = React.useState("")
     const handleEmailChange = React.useCallback((e) => {
         setEmail(e.target.value)
-    })
+    }, [setEmail])
     const handlePasswordChange = React.useCallback((e) => {
         setPassword(e.target.value)
-    })
+    }, [setPassword])
     const handleSubmit = React.useCallback(() => {
         serviceInstance.post("/user/login", { email, password }).then((data) => {
             setAuthToken(data.idToken)
         })
-    })
+    }, [email, password])
     return <>
         <Paper className={classes.root}>
             <img src={Logo} className={classes.logo} />
