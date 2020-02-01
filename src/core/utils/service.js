@@ -9,7 +9,7 @@ export const defaults = {
   perPage: 10,
 };
 
-const BASEURL="http://localhost:8080/api"
+const BASEURL = "http://localhost:8080/api"
 export const serviceInstance = axios.create({
   baseURL: BASEURL,
 });
@@ -47,4 +47,8 @@ export function setAuthToken(token) {
 
 export function clearAuthToken() {
   window.localStorage.removeItem(AUTH_TOKEN);
+}
+
+export function getAuthToken() {
+  return window.localStorage.getItem(AUTH_TOKEN)
 }

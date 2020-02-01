@@ -1,9 +1,9 @@
 import React from 'react';
 import MaterialTable from "mui-datatables";
 
-import { LinearProgress } from "@material-ui/core";
+import { LinearProgress, Button } from "@material-ui/core";
 
-export default function Table({ columns,title ,onSearchClose, onSearchChange, page, total, perPage, onPageChange, onPerPageChange, loading, list,search }) {
+export default function Table({ columns, title, onSearchClose, onSearchChange, page, total, perPage, onPageChange, onPerPageChange, loading, list, search, extra = "" }) {
     return <MaterialTable
         options={
             {
@@ -25,7 +25,7 @@ export default function Table({ columns,title ,onSearchClose, onSearchChange, pa
                     top: 0,
                     position: 'absolute',
                 }
-                } /> : null
+                } /> : extra
             }
         }
         title={title}

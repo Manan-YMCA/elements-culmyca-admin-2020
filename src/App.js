@@ -8,10 +8,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import {BrowserRouter as Router,Route} from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import SideDrawer from "./component/SideBar"
-import {AdminSideBar,AdminRoutes} from "./routes";
+import { AdminSideBar, AdminRoutes } from "./routes";
+import Login from './pages/login';
+import { getAuthToken } from './core/utils/service';
 
 
 const drawerWidth = 240;
@@ -43,41 +45,41 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function App() {
-  const role="Admin"
+  const role = "Admin"
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
   return (
     <div className={classes.root}>
-      <Router>
-      <CssBaseline />
-      <SideDrawer open={mobileOpen} handleDrawerToggle={handleDrawerToggle} sideMenu={AdminSideBar} />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            {role}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        {
-          AdminRoutes.map(({path,component,nested})=><Route exact path={path} component={component} />)
-        }
-      </main>
-      </Router>
+      {getAuthToken() ?
+        <Router>
+          <CssBaseline />
+          <SideDrawer open={mobileOpen} handleDrawerToggle={handleDrawerToggle} sideMenu={AdminSideBar} />
+          <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                className={classes.menuButton}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap>
+                {role}
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            {
+              AdminRoutes.map(({ path, component, nested }) => <Route exact path={path} component={component} />)
+            }
+          </main>
+        </Router> : <Login />}
     </div>
   );
 }
