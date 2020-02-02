@@ -36,8 +36,8 @@ function Login() {
     return <>
         <Paper className={classes.root}>
             <img src={Logo} className={classes.logo} />
-            <TextField className={classes.outlined} label="Email" variant="outlined" value={email} onChange={handleEmailChange} />
-            <TextField className={classes.outlined} label="Password" variant="outlined" value={password} onChange={handlePasswordChange} />
+            <TextField className={classes.outlined} label="Email" type="email" variant="outlined" value={email} onChange={handleEmailChange} />
+            <TextField className={classes.outlined} label="Password" variant="outlined" type="password" value={password} onChange={handlePasswordChange} />
             <Button variant="contained" onClick={handleSubmit}>Login</Button>
         </Paper>
     </>

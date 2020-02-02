@@ -7,13 +7,13 @@ import {
 
 
 export const { reducer,actions } = createSlice({
-    name: "getSponsors",
+    name: "getClub",
     initialState: {
         loading: false,
         data: getInitialPaginatedData(),
         error: null,
     },
     reducers: {
-        getSponsor:handleAsyncAction()
+        getClub:handleAsyncAction()
     },
 });

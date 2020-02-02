@@ -6,14 +6,14 @@ import {
 } from '../createReducers';
 
 
-export const { reducer,actions } = createSlice({
-    name: "getSponsors",
+export const { reducer, actions } = createSlice({
+    name: "getUser",
     initialState: {
         loading: false,
         data: getInitialPaginatedData(),
         error: null,
     },
     reducers: {
-        getSponsor:handleAsyncAction()
+        getUser: handleAsyncAction()
     },
 });
