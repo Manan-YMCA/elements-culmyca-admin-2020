@@ -3,7 +3,7 @@ import MaterialTable from "mui-datatables";
 
 import { LinearProgress, Button } from "@material-ui/core";
 
-export default function Table({ columns, title, onSearchClose, onSearchChange, page, total, perPage, onPageChange, onPerPageChange, loading, list, search, extra = "",options={} }) {
+export default function Table({ columns, title, onSearchClose, onSearchChange, page, total, perPage, onPageChange, onPerPageChange, loading, list, search="", extra = "",options={} }) {
     return <MaterialTable
         options={
             {
