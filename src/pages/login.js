@@ -2,6 +2,7 @@ import React from 'react';
 import { Paper, TextField, Button, makeStyles } from '@material-ui/core';
 import Logo from "../logo.png"
 import { serviceInstance, setAuthToken } from '../core/utils/service';
+import { useSnackbar } from 'notistack';
 
 const useStyle = makeStyles({
     logo: {
@@ -15,11 +16,12 @@ const useStyle = makeStyles({
         margin: "20vh auto"
     },
     outlined: {
-        margin: "2px"
+        margin: "10px"
     }
 })
-function Login() {
+function Login({ setLogin }) {
     const classes = useStyle();
+    const { enqueueSnackbar } = useSnackbar();
     const [password, setPassword] = React.useState("");
     const [email, setEmail] = React.useState("")
     const handleEmailChange = React.useCallback((e) => {
@@ -31,6 +33,11 @@ function Login() {
     const handleSubmit = React.useCallback(() => {
         serviceInstance.post("/user/login", { email, password }).then((data) => {
             setAuthToken(data.idToken)
+            setLogin(true);
+        }).catch(() => {
+            enqueueSnackbar("Password or Email wrong", {
+                variant: "error"
+            })
         })
     }, [email, password])
     return <>

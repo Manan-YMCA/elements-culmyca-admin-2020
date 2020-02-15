@@ -7,8 +7,16 @@ import { actions } from "../core/reducers/event"
 import { serviceInstance } from "../core/utils/service"
 import Table from '../component/Table'
 import useSnackbar from "../hooks/useSnackbar";
+import { useConfirmationDialog } from "../component/dialog"
+import { IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete"
+import EditIcon from "@material-ui/icons/Edit"
+import AddIcon from "@material-ui/icons/Add";
 
 export default function User() {
+    const { getConfirmation } = useConfirmationDialog();
+    const { data: roles, error: RoleError} = useSelector((state => state.whomiReducer))
+    useSnackbar(RoleError)
     const { data: { list, perPage, page, total }, loading, error } = useSelector((state) => state.eventReducer);
     useSnackbar(error);
     const dispatch = useDispatch();
@@ -34,6 +42,13 @@ export default function User() {
             }
         })
     }, [list])
+    const renderAction = (id, tableMetaData) => <><IconButton onClick={() => getConfirmation({
+        title: 'Delete sponsor',
+        body: 'Are your sure you want to delete sponsor?',
+        confirmationAction: () => {},
+
+    })}><DeleteIcon /></IconButton><IconButton onClick={() => {}} ><EditIcon /></IconButton></>
+    const extraAction = () => <IconButton onClick={()=>{}}> <AddIcon /></IconButton>
     return <>
         <Table
             page={page}
@@ -48,8 +63,10 @@ export default function User() {
                 { label: "Club", name: "organisedBy" },
                 { label: "Amount", name: "fee" },
                 { label: "Date", name: "event" },
-                { lable: "Contact", name: "contact" }
+                { lable: "Contact", name: "contact" },
+                { label: "Action", name: "id", options: { customBodyRender: renderAction } }
             ]}
             list={renderList}
+            extra={extraAction}
         /></>
 }

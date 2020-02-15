@@ -4,6 +4,8 @@ import { reducer as clubReducer } from "./club"
 import { reducer as userReducer } from "./user"
 import { reducer as paymentReducer } from "./payment"
 import { reducer as eventReducer } from "./event"
+import { reducer as registrationReducer } from "./registration"
+import { reducer as whomiReducer } from "./whomi"
 
 export const reducer = combineReducers({
     sponsorReducer,
@@ -11,4 +13,6 @@ export const reducer = combineReducers({
     userReducer,
     paymentReducer,
     eventReducer,
+    registrationReducer,
+    whomiReducer
 })

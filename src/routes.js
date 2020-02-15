@@ -56,53 +56,149 @@ export const AdminRoutes = [
 export const JsecRoutes = [
     {
         path: "/",
-        component: () => { },
+        component: DashboardPage,
         nested: [],
-    }
-]
+    },
+    {
+        path: "/registrations",
+        component: RegistrationPage,
+        nested: [],
+    },
+    {
+        path: "/events",
+        component: EventPage,
+        nested: [],
+    },
+];
 
 export const BrixRoutes = [
     {
         path: "/",
-        component: () => { },
+        component: DashboardPage,
         nested: [],
+    },
+    {
+        path: "/users",
+        component: UserPage,
+        nested: [],
+    },
+    {
+        path: "/registrations",
+        component: RegistrationPage,
+        nested: [],
+    },
+    {
+        path: "/events",
+        component: EventPage,
+        nested: [],
+    },
+    {
+        path: "/sponsors",
+        component: SponsorPage,
+        nested: [],
+    },
+    {
+        path: "/clubs",
+        component: ClubPage,
+        nested: [],
+    },
+    {
+        path: "/payments",
+        component: PaymentPage,
+        nested: [],
+    }
+];
+
+export const AdminSideBar = [
+    {
+        path: "/",
+        title: "Dashboard",
+        icon: <Dashboard />
+    },
+    {
+        path: "/users",
+        title: "Users",
+        icon: <Users />
+    },
+    {
+        path: "/registrations",
+        title: "Registrations",
+        icon: <Registration />,
+    },
+    {
+        path: "/sponsors",
+        title: "Sponsors",
+        icon: <Sponsor />
+    },
+    {
+        path: "/clubs",
+        title: "Clubs",
+        icon: <Club />
+    },
+    {
+        path: "/events",
+        title: "Events",
+        icon: <Event />
+    },
+    {
+        path: "/payments",
+        title: "Payments",
+        icon: <Payment />
     }
 ]
 
-export const AdminSideBar=[
+export const JsecSideBar = [
     {
-        path:"/",
-        title:"Dashboard",
-        icon:<Dashboard />
+        path: "/",
+        title: "Dashboard",
+        icon: <Dashboard />
     },
     {
-        path:"/users",
-        title:"Users",
-        icon:<Users />
+        path: "/registrations",
+        title: "Registrations",
+        icon: <Registration />,
     },
     {
-        path:"/registrations",
-        title:"Registrations",
-        icon:<Registration />,
+        path: "/events",
+        title: "Events",
+        icon: <Event />
+    },
+]
+
+export const BrixSideBar = [
+    {
+        path: "/",
+        title: "Dashboard",
+        icon: <Dashboard />
     },
     {
-        path:"/sponsors",
-        title:"Sponsors",
-        icon:<Sponsor />
+        path: "/users",
+        title: "Users",
+        icon: <Users />
     },
     {
-        path:"/clubs",
-        title:"Clubs",
-        icon:<Club />
+        path: "/registrations",
+        title: "Registrations",
+        icon: <Registration />,
     },
     {
-        path:"/events",
-        title:"Events",
-        icon:<Event />
+        path: "/sponsors",
+        title: "Sponsors",
+        icon: <Sponsor />
     },
     {
-        path:"/payments",
-        title:"Payments",
-        icon:<Payment />
+        path: "/clubs",
+        title: "Clubs",
+        icon: <Club />
+    },
+    {
+        path: "/events",
+        title: "Events",
+        icon: <Event />
+    },
+    {
+        path: "/payments",
+        title: "Payments",
+        icon: <Payment />
     }
 ]
