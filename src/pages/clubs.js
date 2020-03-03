@@ -144,7 +144,7 @@ function ClubForm({ formik }) {
                 onChange={formik.handleChange}
                 error={!!formik.errors.logo}
                 helperText={formik.errors.logo}
-                value={formik.values.tagLine} />
+                value={formik.values.logo} />
                 <TextField
                     className={classes.textField}
                     label="Image"
@@ -153,7 +153,7 @@ function ClubForm({ formik }) {
                     onChange={formik.handleChange}
                     error={!!formik.errors.image}
                     helperText={formik.errors.image}
-                    value={formik.values.tagLine} />
+                    value={formik.values.image} />
     </form>)
 
 }
@@ -174,6 +174,8 @@ function ClubDialog({ open, handleClose, initialValues = {
                 .min(3, "Must be greater than 3")
                 .required("Name must be provided"),
             tagLine: yup.string().required("tag must be provided"),
+            image:yup.string().required("image is required"),
+            logo:yup.string().required("logo is required")
         })
     })
     const handleSubmit = React.useCallback(() => {
