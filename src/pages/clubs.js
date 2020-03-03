@@ -74,7 +74,7 @@ function Jsec({ open, handleClose, id }) {
                 variant: "error"
             })
         }).finally(() => {
-            
+
         })
     }, [enqueueSnackbar, handleClose])
     const handleDelete=React.useCallback((id)=>{
@@ -136,13 +136,33 @@ function ClubForm({ formik }) {
             error={!!formik.errors.tagLine}
             helperText={formik.errors.tagLine}
             value={formik.values.tagLine} />
+            <TextField
+                className={classes.textField}
+                label="Logo"
+                variant="outlined"
+                name="logo"
+                onChange={formik.handleChange}
+                error={!!formik.errors.logo}
+                helperText={formik.errors.logo}
+                value={formik.values.tagLine} />
+                <TextField
+                    className={classes.textField}
+                    label="Image"
+                    variant="outlined"
+                    name="image"
+                    onChange={formik.handleChange}
+                    error={!!formik.errors.image}
+                    helperText={formik.errors.image}
+                    value={formik.values.tagLine} />
     </form>)
 
 }
 
 function ClubDialog({ open, handleClose, initialValues = {
     name: "",
-    tagLine: ""
+    tagLine: "",
+    logo:"",
+    image:""
 } }) {
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbarQ();

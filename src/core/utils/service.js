@@ -9,7 +9,7 @@ export const defaults = {
   perPage: 10,
 };
 
-const BASEURL = process.env.REACT_APP_BASE_URL
+const BASEURL = process.env.REACT_APP_BASE_URL || "http://localhost:8080/api"
 export const serviceInstance = axios.create({
   baseURL: BASEURL,
 });
