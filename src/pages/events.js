@@ -40,28 +40,43 @@ function UserDialog({ open, handleClose }) {
     const { enqueueSnackbar } = useSnackbarQ();
     const formik = useFormik({
         initialValues: {
-            fullName: "",
-            email: "",
-            phone: "",
-            password: "",
-            lastName: "",
-            photoUrl: ""
+            title: "",
+            fPrize: 0,
+            sPrize: 0,
+            tPrize: 0,
+            photoUrl: "",
+            description: "",
+            fee: 0,
+            eventTime: "00:00:00",
+            eventDate: new Date(),
+            eventDuration: 0,
+            genre: "",
+            venue: "",
+            images: "",
+            rules: ""
         },
         validationSchema: yup.object({
-            fullName: yup.string()
-                .max(30, "Must be less than 30")
-                .min(3, "Must be greater than 3")
-                .required("Name must be provided"),
-            email: yup.string().email().required("email must be provided"),
-            phone: yup.string().length(12, "Length must be greater than 12(91+phone number)").required("phone must be provided"),
-            lastName: yup.string().required("last name is required"),
-            password: yup.string().length(8, "Length must be greater than 8").required("password is required"),
-            photoUrl: yup.string().url("photourl is required").required("photourl is required")
+            title: yup.string().required(),
+            fPrize: yup.number().label("first prize").positive().moreThan(-1).required(),
+            sPrize: yup.number().positive().label("second prize").moreThan(-1).required(),
+            tPrize: yup.number().positive().label("third prize").moreThan(-1).required(),
+            photoUrl: yup.string().url().label("photo url").required(),
+            description: yup.string().required(),
+            fee: yup.number().positive().moreThan(-1).required(),
+            eventTime: yup.string().matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/).required(),
+            eventDate: yup.date().label("time").min(new Date()).required(),
+            eventDuration: yup.number().positive().moreThan(-1).required(),
+            genre: yup.string().required(),
+            venue: yup.string().required(),
+            images: yup.string().url().required(),
+            rules: yup.string().required()
         })
     })
     const handleSubmit = React.useCallback(() => {
-        serviceInstance.post("/user/register", formik.values).then(() => {
-            enqueueSnackbar("Successfully created Users", {
+        let { eventDate, eventTime } = formik.values
+        const values = { ...formik.values, eventDate: `${eventDate}T00:00:00`, eventTime: `${eventDate}T${eventTime}` }
+        serviceInstance.post("/club/event", values).then(() => {
+            enqueueSnackbar("Successfully created event", {
                 variant: "success"
             })
         }).catch(() => {
@@ -69,13 +84,13 @@ function UserDialog({ open, handleClose }) {
                 variant: "error"
             })
         }).finally(() => {
-            dispatch(actions.getUser(serviceInstance.get(`/admin/user?perPage=${10}&page=${0}`)))
+            dispatch(actions.getEvents(serviceInstance.get(`/event?perPage=${10}&page=${0}`)))
             handleClose()
         })
     }, [enqueueSnackbar, dispatch, formik.values, handleClose])
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">User</DialogTitle>
+            <DialogTitle id="form-dialog-title">Event</DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     {"Create New User for various event in the system"}
@@ -99,59 +114,143 @@ function UserForm({ formik }) {
     return (<form onSubmit={formik.handleSubmit} className={classes.root}>
         <TextField
             className={classes.textField}
-            label="Name"
+            label="Title"
             variant="outlined"
-            name="fullName"
+            name="title"
             onChange={formik.handleChange}
-            error={!!formik.errors.fullName}
-            helperText={formik.errors.fullName}
-            value={formik.values.fullName} />
+            error={!!formik.errors.title}
+            helperText={formik.errors.title}
+            value={formik.values.title} />
         <TextField
             className={classes.textField}
-            label="Email"
+            label="First Prize"
             variant="outlined"
-            name="email"
+            name="fPrize"
+            type="number"
             onChange={formik.handleChange}
-            error={!!formik.errors.email}
-            helperText={formik.errors.email}
-            value={formik.values.email} />
+            error={!!formik.errors.fPrize}
+            helperText={formik.errors.fPrize}
+            value={formik.values.fPrize} />
         <TextField
             className={classes.textField}
-            label="Phone"
+            label="Second Prize"
             variant="outlined"
-            name="phone"
+            name="sPrize"
+            type="number"
             onChange={formik.handleChange}
-            error={!!formik.errors.phone}
-            helperText={formik.errors.phone}
-            value={formik.values.phone} />
+            error={!!formik.errors.sPrize}
+            helperText={formik.errors.sPrize}
+            value={formik.values.sPrize} />
         <TextField
             className={classes.textField}
-            label="Password"
+            label="Third Prize"
             variant="outlined"
-            name="password"
+            name="tPrize"
+            type="number"
             onChange={formik.handleChange}
-            error={!!formik.errors.password}
-            helperText={formik.errors.password}
-            value={formik.values.password} />
+            error={!!formik.errors.tPrize}
+            helperText={formik.errors.tPrize}
+            value={formik.values.tPrize} />
         <TextField
             className={classes.textField}
-            label="Avatar"
+            label="Photo"
             variant="outlined"
             name="photoUrl"
             onChange={formik.handleChange}
             error={!!formik.errors.photoUrl}
             helperText={formik.errors.photoUrl}
-            value={formik.values.photoUrl}
+            value={formik.values.photoUrl} />
+        <TextField
+            multiline
+            className={classes.textField}
+            label="Description"
+            variant="outlined"
+            name="description"
+            onChange={formik.handleChange}
+            error={!!formik.errors.description}
+            helperText={formik.errors.description}
+            value={formik.values.description} />
+        <TextField
+            multiline
+            className={classes.textField}
+            label="Rules"
+            variant="outlined"
+            name="rules"
+            onChange={formik.handleChange}
+            error={!!formik.errors.rules}
+            helperText={formik.errors.rules}
+            value={formik.values.rules} />
+        <TextField
+            className={classes.textField}
+            label="Fee"
+            variant="outlined"
+            name="fee"
+            type="number"
+            onChange={formik.handleChange}
+            error={!!formik.errors.fee}
+            helperText={formik.errors.fee}
+            value={formik.values.fee} />
+        <TextField
+            className={classes.textField}
+            label="Date"
+            variant="outlined"
+            name="eventDate"
+            type="date"
+            onChange={formik.handleChange}
+            error={!!formik.errors.eventDate}
+            helperText={formik.errors.eventDate}
+            value={formik.values.eventDate}
         />
         <TextField
             className={classes.textField}
-            label="Last Name"
+            label="Time"
             variant="outlined"
-            name="lastName"
+            name="eventTime"
             onChange={formik.handleChange}
-            error={!!formik.errors.lastName}
-            helperText={formik.errors.lastName}
-            value={formik.values.lastName}
+            error={!!formik.errors.eventTime}
+            helperText={formik.errors.eventTime}
+            value={formik.values.eventTime}
+        />
+        <TextField
+            className={classes.textField}
+            label="Duration in Mins"
+            variant="outlined"
+            name="eventDuration"
+            type="number"
+            onChange={formik.handleChange}
+            error={!!formik.errors.eventDuration}
+            helperText={formik.errors.eventDuration}
+            value={formik.values.eventDuration}
+        />
+        <TextField
+            className={classes.textField}
+            label="Venue"
+            variant="outlined"
+            name="venue"
+            onChange={formik.handleChange}
+            error={!!formik.errors.venue}
+            helperText={formik.errors.venue}
+            value={formik.values.venue}
+        />
+        <TextField
+            className={classes.textField}
+            label="Additional Image"
+            variant="outlined"
+            name="images"
+            onChange={formik.handleChange}
+            error={!!formik.errors.images}
+            helperText={formik.errors.images}
+            value={formik.values.images}
+        />
+        <TextField
+            className={classes.textField}
+            label="Genre"
+            variant="outlined"
+            name="genre"
+            onChange={formik.handleChange}
+            error={!!formik.errors.genre}
+            helperText={formik.errors.genre}
+            value={formik.values.genre}
         />
     </form>)
 
@@ -189,8 +288,8 @@ export default function User() {
     }, [list])
     const handleClose = React.useCallback(() => setOpen(!open), [open, setOpen])
     const renderAction = (id, tableMetaData) => <><IconButton onClick={() => getConfirmation({
-        title: 'Delete sponsor',
-        body: 'Are your sure you want to delete sponsor?',
+        title: 'Delete Event',
+        body: 'Are your sure you want to delete event?',
         confirmationAction: () => { },
 
     })}><DeleteIcon /></IconButton><IconButton onClick={() => { }} ><EditIcon /></IconButton></>
